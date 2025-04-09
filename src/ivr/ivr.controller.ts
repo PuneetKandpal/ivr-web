@@ -90,4 +90,10 @@ export class IvrController {
     console.log('Conference status received:', body);
     return ""
   }
+
+  @Post('call-status')
+  handleCallStatus(@Body() body: any) {
+    console.log('Call status received:', body);
+    return ""
+  }
 }

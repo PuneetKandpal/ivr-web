@@ -37,6 +37,8 @@ export class SupportAgentController {
     @Param('id') id: string,
     @Body('customerPhoneNumber') customerPhoneNumber: string,
   ) {
+
+    console.log("customerPhoneNumber", customerPhoneNumber)
     if (!customerPhoneNumber) {
       throw new HttpException('Customer phone number is required', HttpStatus.BAD_REQUEST);
     }

@@ -71,15 +71,20 @@ export class TwilioService {
 
     try {
       const call = await this.twilioClient.calls.create({
-        twiml: `<Response><Say>Connecting you to ${agent.name}</Say><Dial>${customerPhoneNumber}</Dial></Response>`,
+        twiml: `<Response>
+          <Say>Connecting you to ${agent.name}</Say>
+          <Dial>
+            <Client>agent-${agentId}</Client>
+          </Dial>
+        </Response>`,
         to: customerPhoneNumber,
         from: process.env.TWILIO_PHONE_NUMBER,
-        statusCallback: `${process.env.BASE_URL}/twilio/call-status`,
+        statusCallback: `/ivr/call-status`,
         statusCallbackEvent: ['initiated', 'ringing', 'answered', 'completed'],
         statusCallbackMethod: 'POST'
       });
 
-      console.log(`✅ Successfully initiated call: ${call.sid}`);
+      console.log(`✅ Successfully initiated call to agent: ${call.sid}`);
       return {
         callSid: call.sid,
         status: call.status,

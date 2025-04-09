@@ -8,6 +8,11 @@ export interface SupportAgent {
   priority: number;
 }
 
+interface PendingCall {
+  callSid: string;
+  customerPhoneNumber: string;
+}
+
 @Injectable()
 export class SupportAgentService {
   private agents: SupportAgent[] = [
@@ -16,6 +21,8 @@ export class SupportAgentService {
     { id: 14, name: 'Mike Johnson', departmentId: 2, isAvailable: false, priority: 1 },
     { id: 15, name: 'Sarah Williams', departmentId: 2, isAvailable: true, priority: 2 },
   ];
+
+  private pendingCalls: Map<number, PendingCall> = new Map();
 
   findAll(): SupportAgent[] {
     return this.agents;
@@ -49,5 +56,17 @@ export class SupportAgentService {
       agent.isAvailable = isAvailable;
     }
     return agent;
+  }
+
+  async setPendingCall(agentId: number, callInfo: PendingCall): Promise<void> {
+    this.pendingCalls.set(agentId, callInfo);
+  }
+
+  getPendingCall(agentId: number): PendingCall | undefined {
+    return this.pendingCalls.get(agentId);
+  }
+
+  clearPendingCall(agentId: number): void {
+    this.pendingCalls.delete(agentId);
   }
 }
